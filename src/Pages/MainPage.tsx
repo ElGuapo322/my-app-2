@@ -1,18 +1,25 @@
 import Column from "../Components/Column/column";
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { v4 as uuidv4 } from 'uuid';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { Form, Field } from 'react-final-form'
 import {Input} from '../Components/Input/Input'
+import Login from '../Components/Login'  
 
-const columnData =[{id : uuidv4(),
-    columnName: "TODO",}, {id : uuidv4(),
-        columnName: "In Progress",}, {id : uuidv4(),
-            columnName: "Testing",}, {id : uuidv4(),
-                columnName: "Done",}];
+const columnData =[
+    {id : uuidv4(),
+    columnName: "TODO",}, 
+    {id : uuidv4(),
+    columnName: "In Progress",}, 
+    {id : uuidv4(),
+    columnName: "Testing",}, 
+    {id : uuidv4(),
+    columnName: "Done",}];
 
 export default function MainPage(){
+
+    
 
 const [columns, setColumns] = useState(columnData);
 const [isModalOpen, setModalOpen] = useState(false);
@@ -24,8 +31,13 @@ console.log(newData)
 setColumns(newData)
 }
 const changeColumn =(v:any)=>{
-//console.log(v)
-//columns.map((i)=>(if()))
+console.log(v)
+const newColumns = columns.map((i:any)=>{if(v.id === i.id){
+    let index = columns.indexOf(i)
+     columns[index].columnName = v.title
+}return i})
+
+setColumns(newColumns)
 }
 
 const addColumn =(v:any) =>{
@@ -35,14 +47,20 @@ const addColumn =(v:any) =>{
     }
     console.log(createObj)
     setColumns([...columns, createObj])
+    
 }
 
 
     return(
         <div className="main">
+            <div>Привет,{localStorage.getItem('storageName')? localStorage.getItem('storageName'): 'Пользователь'}!</div>
         {columns.map((i)=>(<div><Column key={i.id} title ={i.columnName}/>
-        <Popup trigger={<button id ={i.id} onClick={()=>setModalOpen(!isModalOpen)}>Change</button>} modal>
+        <Popup trigger={<button id ={i.id} onClick={()=>setModalOpen(!isModalOpen)}>Change</button>} >
         <Form
+        initialValues ={{
+            
+            id:`${i.id}`
+        }}
       onSubmit={changeColumn}
       render={({ handleSubmit, form, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit}>
@@ -78,6 +96,7 @@ const addColumn =(v:any) =>{
     />
 
         </Popup>
+   <Login/>
         </div>
     )
 }
