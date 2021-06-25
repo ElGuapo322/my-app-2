@@ -12,10 +12,10 @@ interface Props {
 export default function Column(props:Props){
     const [add, setAdd] = useState(false);
     const [cards, setCards]:any = useState([]);
-    const [cardName, setCardName] = useState<{id: string; title: string}>()
-    const [countId, setCountId]:any = useState(1)
-    console.log(cards)
-    console.log(cardName)
+    //const [cardName, setCardName] = useState<{id: string; title: string}>()
+    
+    console.log("cards", cards)
+    
 
 const addBtn = ():any =>{
     if (add ===false){
@@ -27,14 +27,14 @@ const addBtn = ():any =>{
 const closeBtn =() =>{
     setAdd(false)
 }
-const inputCardName = (v: any) =>{
-    let obj ={
-        id: uuidv4(),
-        title: `${v.target.title}`
+// const inputCardName = (v: any) =>{
+//     let obj ={
+//         id: uuidv4(),
+//         title: `${v.target.title}`
 
-    }
-    setCardName(obj);
-}
+//     }
+//     setCardName(obj);
+// }
 const addCard = (v:any) =>{
     // e.preventDefault();
     //console.log(v)
@@ -59,15 +59,18 @@ const addCard = (v:any) =>{
             title: `${v.title}`
     
         }
-        setCardName(obj)
-        //setCards([...cards, cardName])
-        //localStorage.setItem('storageCards', cards)
+        
+        if(cards){
+            setCards([...cards, obj])
+        }else setCards(obj)
+        
+        localStorage.setItem('storageCards', cards)
         reset()
         
         }}
       render={({ handleSubmit, form, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit}>
-          <Field name="title" component={Input} placeholder='Введите название карточки' onChange={inputCardName}/>
+          <Field name="title" component={Input} placeholder='Введите название карточки' />
           
           <div className="buttons">
             <button type="submit" disabled={submitting}>
