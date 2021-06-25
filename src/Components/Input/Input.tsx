@@ -7,8 +7,8 @@ interface InputProps extends FieldRenderProps<string> {
     // onChange: any;
     }
 export const Input: FC<InputProps> = ({placeholder='VVEDITE TEXT', input, meta}) => {
-    console.log(input)
-    console.log(meta)
+    // console.log(input)
+    // console.log(meta)
     return(
         <div>
             <input placeholder={placeholder} onChange={input.onChange} value={input.value}/>
