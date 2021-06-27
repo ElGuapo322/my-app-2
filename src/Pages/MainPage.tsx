@@ -6,6 +6,10 @@ import 'reactjs-popup/dist/index.css';
 import { Form, Field } from 'react-final-form'
 import {Input} from '../Components/Input/Input'
 import Login from '../Components/Login'  
+import { isParenthesizedExpression } from "typescript";
+import Card from "../Components/Cards/Cards"
+
+export const ThemeContext = React.createContext({cards:[], addCard:any});
 
 
 const columnData =[
@@ -25,7 +29,8 @@ export default function MainPage(){
 const [columns, setColumns] = useState(columnData);
 const [isModalOpen, setModalOpen] = useState(false);
 const [add, setAdd] = useState(false);
-const [cards, setCards] = useState([])
+const [cards, setCards]:any = useState([])
+const [comments, setComments] =useState([])
 
 const addBtn =()=>{
 setAdd(true)
@@ -61,35 +66,23 @@ const addColumn =(v:any) =>{
 }
 const addCard =(v:any)=>{
 let createObj ={
+id:uuidv4(),
+name: `${v.title}`
 
 }
+setCards([...cards, createObj])
 }
 
     return(
+      <ThemeContext.Provider value={{ cards: cards, addCard: addCard }}>
         <div className="main">
             <div>Привет,{localStorage.getItem('storageName')? localStorage.getItem('storageName'): 'Пользователь'}!</div>
          {columns.map((i)=>(
          <div>
-            <Column key={i.id} title ={i.columnName}>
+            <Column key={i.id} id={i.id} title ={i.columnName}/>
+             
               
-            <Form
-      onSubmit={addCard}
-      render={({ handleSubmit, form, submitting, pristine, values }) => (
-        <form onSubmit={handleSubmit}>
-          <Field name="title" component={Input} placeholder='Введите название карточки' />
-          
-          <div className="buttons">
-            <button type="submit" disabled={submitting}>
-              +Добавить
-            </button>
-            <button onClick={closeBtn}>X</button>
-          </div>
-          
-        </form>
-      )}
-    />
-
-              </Column>
+              
                
            
         <Popup trigger={<button id ={i.id} onClick={()=>setModalOpen(!isModalOpen)}>Change</button>} >
@@ -134,6 +127,9 @@ let createObj ={
 
         </Popup>
    <Login/>
+   <Card/>
         </div>
+        </ThemeContext.Provider>
     )
+    
 }
