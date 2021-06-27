@@ -3,4 +3,5 @@
     width:200px;
     display:flex;
     flex-direction:column;
+    height: 300px;
   }
